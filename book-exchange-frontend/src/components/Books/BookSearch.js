@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { searchBooks, loadMoreBooks } from '../../redux/actions/searchActions';
+import { searchBooks } from '../../redux/actions/searchActions';
 import { Container, Form, Row, Col, Card, Button } from 'react-bootstrap';
 import './BookSearch.css';
 
@@ -9,16 +9,20 @@ const BookSearch = () => {
   const [genre, setGenre] = useState('');
   const [availability, setAvailability] = useState('');
   const dispatch = useDispatch();
-  const books = useSelector((state) => state.books.books);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(10);
+  const books = useSelector((state) => state.search.books);
+ const [currentPage, setCurrentPage] = useState(1);
+  const [booksPerPage] = useState(6);
 
   useEffect(() => {
-    dispatch(loadMoreBooks());
-  }, [dispatch]);
+    if (searchTerm) {
+      dispatch(searchBooks({ searchTerm, genre, availability, page: currentPage, limit: booksPerPage }));
+    }
+  }, [dispatch, searchTerm, genre, availability, currentPage, booksPerPage]);
+
 
   const handleSearch = (e) => {
     e.preventDefault();
+    // Dispatch the search action with the current search criteria
     dispatch(searchBooks({ searchTerm, genre, availability }));
   };
 
@@ -40,7 +44,7 @@ const BookSearch = () => {
           placeholder="Search books by title, author, genre"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          required
+          
         />
         <Button variant="primary" type="submit">
           Search

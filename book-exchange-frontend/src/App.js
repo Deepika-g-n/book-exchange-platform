@@ -21,7 +21,6 @@ const getCurrentUserId = () => {
 
   try {
     const decodedToken = jwtDecode(token);
-    console.log(decodedToken)
     return decodedToken.user.id; 
   } catch (error) {
     console.error("Failed to decode token:", error);
@@ -32,7 +31,7 @@ const getCurrentUserId = () => {
 
 const App = () => {
   const currentUserId = getCurrentUserId();
-  console.log(currentUserId)
+  
   return (
     <Provider store={store}>
       <Router>

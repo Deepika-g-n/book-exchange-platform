@@ -25,7 +25,6 @@ exports.addBook = async (req, res) => {
 // Get all books
 exports.getBooks = async (req, res) => {
   try {
-    console.log(req.user)
     if (req.user) {
       const books = await Book.find({ user: req.user.id });
       res.json(books);
@@ -71,7 +70,6 @@ exports.updateBook = async (req, res) => {
 // Delete a book
 exports.deleteBook = async (req, res) => {
   try {
-    console.log(req.params)
     let book = await Book.findById(req.params.id);
 
     if (!book) {
@@ -94,25 +92,23 @@ exports.deleteBook = async (req, res) => {
 
 //Search a book
 exports.searchBooks = async (req, res) => {
-  const { title, author, genre, location, availability, page = 1, limit = 10 } = req.query;
-
+  const { searchTerm, genre, availability, page = 1, limit = 10 } = req.query.query;
   const query = {};
-  if (title)
-    query.title = { $regex: title, $options: 'i' };
-  if (author)
-    query.author = { $regex: author, $options: 'i' };
-  if (genre)
-    query.genre = { $regex: genre, $options: 'i' };
-  if (location)
-    query.location = { $regex: location, $options: 'i' };
-  if (availability)
-    query.availability = availability;
-
-
+  
+  if (searchTerm){
+    query.$or = [
+      { title: { $regex: searchTerm, $options: 'i' } }, 
+      { author: { $regex: searchTerm, $options: 'i' } }  
+    ];  } 
+  if (genre) query.genre = { $regex: genre, $options: 'i' };
+  
+  if (availability) query.availability = availability ; 
+  
   try {
     const books = await Book.find(query)
       .skip((page - 1) * limit)
       .limit(parseInt(limit));
+    
     const totalBooks = await Book.countDocuments(query);
     res.json({
       books,
@@ -121,9 +117,10 @@ exports.searchBooks = async (req, res) => {
       currentPage: parseInt(page),
     });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error:', err.message);  
     res.status(500).send('Server error');
   }
 };
+
 
 

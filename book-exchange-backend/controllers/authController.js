@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
         throw err;
       res.json({ 
         'message':'Registration Successful',
-        'res':payload });
+        'res':payload,'token':token });
     });
   } catch (err) {
     console.error(err.message);
