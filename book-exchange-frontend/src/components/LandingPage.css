@@ -1,0 +1,42 @@
+.landing-page {
+    height: 100vh;
+    background: url('/public/books-background.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    justify-content: right;
+    align-items: right;
+  }
+  
+  .landing-content { 
+      background-color: white; 
+     padding: 90px;
+     width: 45%; 
+    text-align: center; 
+    
+  }
+  
+  .landing-text {
+    text-align: left;
+  }
+  
+  .landing-text h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .landing-text p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .landing-buttons {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .landing-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  }
+  
